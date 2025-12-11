@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EagleWay Trucking — Application</title>
+  <style>
+    :root{
+      --blue:#0A2A57;
+      --accent:#1E3A8A;
+      --card:#ffffff;
+      --muted:#6b7280;
+      font-family: Inter, Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#06203a 0%, #0b3b6b 100%);
+      color:var(--muted);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:30px;
+    }
+    .app{
+      width:100%;
+      max-width:980px;
+      background:var(--card);
+      border-radius:16px;
+      box-shadow:0 18px 50px rgba(2,6,23,0.45);
+      overflow:hidden;
+    }
+    header{
+      background:linear-gradient(90deg,var(--blue), var(--accent));
+      color:white;
+      padding:22px 28px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+    .logo{
+      width:64px;
+      height:64px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:0.6px;
+      background-image: url('logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    header h1{margin:0;font-size:20px}
+    header p{margin:0;opacity:0.95}
+
+    main{padding:28px}
+    form{display:grid;grid-template-columns:1fr 340px;gap:20px}
+    .left{padding-right:6px}
+    .right{padding-left:6px}
+
+    label{display:block;font-weight:600;margin-top:12px;color:#0b2540}
+    input[type=text], input[type=tel], input[type=email], input[type=number], select, textarea{
+      width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;margin-top:6px;font-size:14px
+    }
+    input[type=file]{margin-top:8px}
+    .row{display:flex;gap:12px}
+    .row > *{flex:1}
+    .section-title{margin-top:18px;background:#f8fafc;padding:10px;border-left:4px solid var(--blue);border-radius:8px;font-weight:700;color:var(--blue)}
+
+    .checkboxes{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .small{font-size:13px;color:#334155}
+
+    .salary-frame{
+      border:2px solid var(--blue);
+      border-radius:10px;
+      padding:14px;
+      margin-top:10px;
+      background:#0b2440;
+      color:white;
+    }
+
+    .salary-frame .salary, .salary-frame .gross {
+      font-weight:700;
+      color:white;
+    }
+
+    .contact-box{background:#f1f5f9;padding:12px;border-radius:10px}
+
+    footer{padding:18px 28px;background:#000;color:white;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    button{background:var(--blue);color:white;padding:12px 18px;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+    .muted{color:#000;font-size:13px}
+
+    @media (max-width:920px){form{grid-template-columns:1fr} .right{order:2}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo"></div>
+      <div>
+        <h1>EagleWay Trucking Application</h1>
+        <p class="muted">Fill and submit — all application data will be prepared to send to <strong>shaxriyor.z@icloud.com</strong></p>
+      </div>
+    </header>
+
+    <main>
+      <form id="appForm" onsubmit="return handleSubmit(event)">
+        <div class="left">
+          <label>Full name</label>
+          <input type="text" name="fullName" required />
+
+          <label>Phone number (digits only)</label>
+          <input type="tel" name="phone" pattern="[0-9]{7,}" placeholder="e.g. 9514075343" required />
+
+          <label>Email address</label>
+          <input type="email" name="email" required />
+
+          <label>Nationality (it doesn't matter)</label>
+          <input type="text" name="nationality" />
+
+          <label>Experience in OTR (years)</label>
+          <input type="number" name="experience" min="1" max="50" step="1" placeholder="Enter years, e.g. 1" oninput="updatePayment(this.value)" />
+
+          <label>Weekly miles</label>
+          <select name="weeklyMiles">
+            <option value="4000">4000</option>
+            <option value="4500">4500</option>
+            <option value="5000">5000</option>
+          </select>
+
+          <label>ELD</label>
+          <select name="eld" disabled>
+            <option>Agreed</option>
+          </select>
+
+          <div class="section-title">Working cycle</div>
+          <label>Choose cycle</label>
+          <select name="cycle">
+            <option>4 Weeks On | 4 Days Off</option>
+            <option>3 Weeks On | 3 Days Off</option>
+            <option>5-6 Weeks On | 5-6 Days Off</option>
+          </select>
+
+          <div class="section-title">Endorsements</div>
+          <div class="checkboxes">
+            <label><input type="checkbox" name="twic" value="TWIC"> TWIC</label>
+            <label><input type="checkbox" name="hazmat" value="Hazmat"> Hazmat</label>
+            <label><input type="checkbox" name="tanker" value="Tanker"> Tanker</label>
+          </div>
+
+          <p class="small">For HAZMAT ONLY: <strong>70 CPM / 30%</strong></p>
+
+          <div class="section-title">Documents (CDL & medical)</div>
+          <label>CDL Front (photo or file)</label>
+          <input type="file" name="cdl_front" accept="image/*,.pdf" />
+
+          <label>CDL Back (photo or file)</label>
+          <input type="file" name="cdl_back" accept="image/*,.pdf" />
+
+          <label>Medical card (photo or file)</label>
+          <input type="file" name="medical" accept="image/*,.pdf" />
+
+        </div>
+
+        <aside class="right">
+          <div class="contact-box">
+            <div class="section-title">Payment / Rates</div>
+
+            <div class="salary-frame" id="paymentBox">
+              <div><strong>Experience-based Payment</strong></div>
+              <div class="salary" id="salaryInfo">Enter your OTR experience</div>
+              <div class="small">Mileage Daily: 800+ approved</div>
+              <div class="small">Mileage Weekly: 4000 (Mon–Fri)</div>
+              <div class="small">Working weeks: Min 3 weeks</div>
+              <div class="small">Home Days: 1 Week = 1 Day</div>
+              <div class="gross" id="grossInfo"></div>
+              <div class="small" style="margin-top:8px;">Escrow: $2,500 ($250/week) — fully refundable</div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <label>Trailer preference</label>
+            <select name="trailer" required>
+              <option value="both">Dry Van + Reefer</option>
+              <option value="dryvan">Dry Van</option>
+              <option value="reefer">Reefer</option>
+            </select>
+
+            <div style="height:12px"></div>
+
+            <label>Payment email</label>
+            <input type="email" name="paymentEmail" value="ziyodaliyevshaxriyor@gmail.com" />
+
+            <div style="height:12px"></div>
+
+            <div class="section-title">Other info</div>
+            <p class="small">For HAZMAT only: <strong>70 CPM / 30%</strong></p>
+            <p class="small">Based out: <strong>GA • IL • OH</strong></p>
+
+            <div style="height:10px"></div>
+            <label>Additional notes</label>
+            <textarea name="notes" rows="5" placeholder="Any extra info..."></textarea>
+
+          </div>
+        </aside>
+
+        <!-- full width actions -->
+        <div style="grid-column:1 / -1; display:flex; gap:12px; margin-top:18px; align-items:center">
+          <div style="flex:1">
+            <button type="submit">Submit Application</button>
+          </div>
+
+          <div style="width:320px; display:flex; gap:8px;">
+            <button type="button" onclick="downloadHTML()" style="background:#0b63a5">Download HTML</button>
+            <button type="button" onclick="window.print()" style="background:#0b8a5e">Print / Preview</button>
+          </div>
+        </div>
+
+      </form>
+
+      <p class="muted" style="margin-top:12px">Contact us: 515-635-1204 · Telegram: https://t.me/Shane_Taylor7 · Email: ziyodaliyevshaxriyor@gmail.com</p>
+
+    </main>
+
+    <footer>
+      <div class="muted">Style: Premium — All sections aligned, escrow & ELD untouched</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="muted">Send all data to:</div>
+        <strong>shaxriyor.z@icloud.com</strong>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function updatePayment(exp){
+      const salaryInfo = document.getElementById('salaryInfo');
+      const grossInfo = document.getElementById('grossInfo');
+      let years = parseInt(exp);
+      if(!years || years < 1){
+        salaryInfo.textContent = 'Enter your OTR experience';
+        grossInfo.textContent = '';
+        return;
+      }
+      if(years <= 2){
+        salaryInfo.textContent = 'Salary: 60 CPM / 26%';
+      } else {
+        salaryInfo.textContent = 'Salary: 65 CPM / 28%';
+      }
+      grossInfo.textContent = 'Gross: $8,000 up to $11,000 weekly';
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const f = document.getElementById('appForm');
+      const data = new FormData(f);
+      const entries = Array.from(data.entries()).filter(kv => kv[1] !== '');
+      let body = '';
+      for(const [k,v] of entries){
+        if(v instanceof File) continue;
+        body += k + ': ' + v + '\n';
+      }
+      const subject = encodeURIComponent('New EagleWay Application — ' + (data.get('fullName') || 'Unknown'));
+      const mailto = 'mailto:shaxriyor.z@icloud.com?subject=' + subject + '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+      return false;
+    }
+
+    function downloadHTML(){
+      const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([html], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'EagleWay-Trucking-Application.html';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
